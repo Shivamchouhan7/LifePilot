@@ -2,8 +2,18 @@ import { createStorageService } from './storageService';
 import { taskService } from './taskService';
 import { applicationService } from './applicationService';
 import { projectService } from './projectService';
+import { addMinutes } from 'date-fns';
 
 const standaloneEventsService = createStorageService('events');
+
+function timedEvent(event, date) {
+  const start = new Date(date);
+  return {
+    ...event,
+    start,
+    end: addMinutes(start, 30),
+  };
+}
 
 export const calendarService = {
   async getEvents(range = {}) {
@@ -20,81 +30,69 @@ export const calendarService = {
     // 1. Task due dates
     tasks.forEach((t) => {
       if (t.dueAt) {
-        events.push({
+        events.push(timedEvent({
           id: `task_${t.id}`,
           title: `Task: ${t.title}`,
-          start: new Date(t.dueAt),
-          end: new Date(t.dueAt),
           type: 'event-task',
           entityType: 'task',
           entityId: t.id,
           priority: t.priority,
           status: t.status,
-        });
+        }, t.dueAt));
       }
     });
 
     // 2. Application dates (interviewAt, assessmentAt, followUpDate)
     applications.forEach((app) => {
       if (app.interviewAt) {
-        events.push({
+        events.push(timedEvent({
           id: `app_interview_${app.id}`,
           title: `Interview: ${app.company} (${app.jobTitle})`,
-          start: new Date(app.interviewAt),
-          end: new Date(app.interviewAt),
           type: 'event-interview',
           entityType: 'application',
           entityId: app.id,
-        });
+        }, app.interviewAt));
       }
       if (app.assessmentAt) {
-        events.push({
+        events.push(timedEvent({
           id: `app_assessment_${app.id}`,
           title: `Assessment: ${app.company}`,
-          start: new Date(app.assessmentAt),
-          end: new Date(app.assessmentAt),
           type: 'event-assessment',
           entityType: 'application',
           entityId: app.id,
-        });
+        }, app.assessmentAt));
       }
       if (app.followUpDate) {
-        events.push({
+        events.push(timedEvent({
           id: `app_followup_${app.id}`,
           title: `Follow-up: ${app.company}`,
-          start: new Date(app.followUpDate),
-          end: new Date(app.followUpDate),
           type: 'event-followup',
           entityType: 'application',
           entityId: app.id,
-        });
+        }, app.followUpDate));
       }
     });
 
     // 3. Project deadlines and milestones
     projects.forEach((proj) => {
       if (proj.targetDate) {
-        events.push({
+        events.push(timedEvent({
           id: `proj_deadline_${proj.id}`,
           title: `Project Target: ${proj.name}`,
-          start: new Date(proj.targetDate),
-          end: new Date(proj.targetDate),
           type: 'event-deadline',
           entityType: 'project',
           entityId: proj.id,
-        });
+        }, proj.targetDate));
       }
       (proj.milestones || []).forEach((m) => {
         if (m.dueDate) {
-          events.push({
+          events.push(timedEvent({
             id: `proj_m_${m.id}`,
             title: `Milestone: ${proj.name} - ${m.title}`,
-            start: new Date(m.dueDate),
-            end: new Date(m.dueDate),
             type: 'event-deadline',
             entityType: 'project',
             entityId: proj.id,
-          });
+          }, m.dueDate));
         }
       });
     });

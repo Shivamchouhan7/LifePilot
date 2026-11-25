@@ -149,3 +149,37 @@
 - `src/components/tasks/KanbanBoard.jsx`
 - `src/components/ui/card.jsx`
 - `client/package.json` and `client/package-lock.json`
+
+## Phase 5: Calendar Views & Notes System
+- **Status**: Completed
+- **Date**: 2026-11-25
+
+### What Was Built:
+1. **Calendar Workspace**:
+   - Replaced the placeholder with month, week, day, and agenda views for task dates, application interviews/assessments/follow-ups, and project targets/milestones.
+   - Added colored event categories, slot-based event creation, and create/edit/delete for standalone calendar events.
+   - Gave derived due dates a 30-minute display duration so timed calendar views can render them.
+2. **Notes Workspace**:
+   - Replaced the placeholder with searchable notes, category filtering, pinned ordering, tags, resource links, and create/edit/delete actions.
+   - Added GitHub-flavored Markdown writing and a live rendered preview.
+   - Enabled the Quick Add “New Note” action to open the note composer directly.
+3. **Loading & Dependencies**:
+   - Lazy-loaded the calendar and notes routes to keep their UI libraries out of the initial page load.
+   - Added `react-big-calendar`, `react-markdown`, and `remark-gfm` to the client dependencies.
+
+### Validation:
+- `npm run lint` passes.
+- `npm run build` passes; Vite still reports the existing initial JavaScript chunk exceeds 500 KB.
+- Browser smoke checks covered calendar views and standalone event CRUD, Markdown preview and note CRUD, and Quick Add navigation.
+- `npm audit --omit=dev` reports no runtime dependency vulnerabilities.
+
+### Files Created / Updated:
+- `src/pages/CalendarPage.jsx`
+- `src/pages/calendar.css`
+- `src/pages/NotesPage.jsx`
+- `src/pages/markdown.css`
+- `src/hooks/useCalendarEvents.js`
+- `src/services/calendarService.js`
+- `src/routes/AppRoutes.jsx`
+- `src/components/layout/QuickAddMenu.jsx`
+- `client/package.json` and `client/package-lock.json`

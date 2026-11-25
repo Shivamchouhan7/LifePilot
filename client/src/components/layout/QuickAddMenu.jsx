@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,12 +10,13 @@ import { Button } from '../ui/button';
 import { Plus, CheckSquare, Briefcase, GraduationCap, FolderGit2, FileText, Lock } from 'lucide-react';
 
 export function QuickAddMenu() {
+  const navigate = useNavigate();
   const actions = [
     { label: 'New Task', icon: CheckSquare, phase: 'Phase 2' },
     { label: 'New Application', icon: Briefcase, phase: 'Phase 3' },
     { label: 'New Learning Goal', icon: GraduationCap, phase: 'Phase 4' },
     { label: 'New Project', icon: FolderGit2, phase: 'Phase 4' },
-    { label: 'New Note', icon: FileText, phase: 'Phase 5' },
+    { label: 'New Note', icon: FileText, phase: 'Phase 5', path: '/notes?new=1' },
   ];
 
   return (
@@ -38,17 +40,22 @@ export function QuickAddMenu() {
           return (
             <DropdownMenuItem
               key={act.label}
-              disabled
-              className="flex items-center justify-between text-xs py-2 opacity-60 cursor-not-allowed"
+              disabled={!act.path}
+              onSelect={() => { if (act.path) navigate(act.path); }}
+              className={`flex items-center justify-between text-xs py-2 ${act.path ? '' : 'opacity-60 cursor-not-allowed'}`}
             >
               <div className="flex items-center gap-2">
                 <Icon className="h-3.5 w-3.5 text-muted-foreground" />
                 <span>{act.label}</span>
               </div>
-              <span className="flex items-center gap-1 text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                <Lock className="h-2.5 w-2.5" />
-                {act.phase}
-              </span>
+              {act.path ? (
+                <span className="text-[10px] text-primary">Ready</span>
+              ) : (
+                <span className="flex items-center gap-1 text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                  <Lock className="h-2.5 w-2.5" />
+                  {act.phase}
+                </span>
+              )}
             </DropdownMenuItem>
           );
         })}

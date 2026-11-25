@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -11,11 +11,15 @@ import { OverviewPage } from '../pages/OverviewPage';
 import { TasksPage } from '../pages/TasksPage';
 import { ApplicationsPage } from '../pages/ApplicationsPage';
 import { ApplicationDetailPage } from '../pages/ApplicationDetailPage';
-import { CalendarPage } from '../pages/CalendarPage';
+const CalendarPage = React.lazy(() =>
+  import('../pages/CalendarPage').then(({ CalendarPage: page }) => ({ default: page }))
+);
 import { LearningPage } from '../pages/LearningPage';
 import { ProjectsPage } from '../pages/ProjectsPage';
 import { ProjectDetailPage } from '../pages/ProjectDetailPage';
-import { NotesPage } from '../pages/NotesPage';
+const NotesPage = React.lazy(() =>
+  import('../pages/NotesPage').then(({ NotesPage: page }) => ({ default: page }))
+);
 import { AnalyticsPage } from '../pages/AnalyticsPage';
 import { SettingsPage } from '../pages/SettingsPage';
 
@@ -33,11 +37,25 @@ export function AppRoutes() {
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/applications/:id" element={<ApplicationDetailPage />} />
-          <Route path="/calendar" element={<CalendarPage />} />
+          <Route
+            path="/calendar"
+            element={
+              <Suspense fallback={<p className="p-6 text-sm text-muted-foreground">Loading calendar…</p>}>
+                <CalendarPage />
+              </Suspense>
+            }
+          />
           <Route path="/learning" element={<LearningPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
-          <Route path="/notes" element={<NotesPage />} />
+          <Route
+            path="/notes"
+            element={
+              <Suspense fallback={<p className="p-6 text-sm text-muted-foreground">Loading notes…</p>}>
+                <NotesPage />
+              </Suspense>
+            }
+          />
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
