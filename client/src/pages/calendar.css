@@ -97,13 +97,26 @@
 }
 
 @media (max-width: 640px) {
+  .calendar-shell .rbc-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
   .calendar-shell .rbc-toolbar-label {
     flex-basis: 100%;
     order: -1;
-    text-align: left;
+    text-align: center;
   }
 
   .calendar-shell .rbc-btn-group {
     margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .calendar-shell .rbc-btn-group button {
+    padding-right: 0.625rem;
+    padding-left: 0.625rem;
   }
 }

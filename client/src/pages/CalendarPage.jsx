@@ -10,6 +10,7 @@ import { Modal } from '../components/common/Modal';
 import { ConfirmDialog } from '../components/common/ConfirmDialog';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
 
 const localizer = dateFnsLocalizer({
