@@ -46,41 +46,6 @@
 - Application Entry: `src/App.jsx`, `src/main.jsx`
 
 ### Known Issues:
-## Phase 3: Applications (List UI, Status History)
-
-- **Status**: Completed
-- **Date**: 2026-11-25
-
-### What Was Built:
-1. **Application UI**:
-   - `ApplicationCard`, `ListView`, `ApplicationsDashboard` components.
-   - List view with “Add Application” button.
-2. **Data Layer**:
-   - `useApplications` hook with CRUD operations.
-   - Updated `applicationService` to track status history.
-3. **Routing & Integration**:
-   - `ApplicationsPage` will later render `ApplicationsDashboard` (placeholder for now).
-4. **Tests**:
-   - Jest + React Testing Library tests for application hooks and components (pending).
-5. **Screenshots**:
-   - Added responsive screenshots for Applications list at 375 px, 768 px, 1280 px (light/dark, sidebar states).
-
-### Files Created / Updated:
-- `src/components/applications/ApplicationCard.jsx`
-- `src/components/applications/ListView.jsx`
-- `src/components/applications/ApplicationsDashboard.jsx`
-- `src/hooks/useApplications.jsx`
-- `src/services/applicationService.js` (enhanced status/history)
-- Updated `src/pages/ApplicationsPage.jsx` (placeholder remains)
-- Added tests under `src/tests/applications/`
-
-### Known Issues:
-- Placeholder for Applications dashboard still uses stub page; full integration pending Phase 4.
-- Sidebar collapsed state still not persisted (addressed in Phase 3).
-- `client/package.json` name/dependencies mismatch remains.
-
-- None. All lint rules and production builds pass with zero warnings.
-
 ## Phase 2: Tasks (List & Kanban, Drag‑and‑Drop, Recurrence, Filters)
 
 - **Status**: Completed
@@ -122,7 +87,6 @@
 ### Known Issues:
 - Sidebar collapsed state not persisted (`lifepilot:sidebar-collapsed` remains `null`). Will be addressed in Phase 3.
 - `client/package.json` still lists `"client"` as name and minimal deps; requires manual correction.
-
 ## Phase 3: Applications (List UI, Status History)
 
 - **Status**: Completed
@@ -157,3 +121,31 @@
 - `client/package.json` name/dependencies mismatch remains.
 
 - None. All lint rules and production builds pass with zero warnings.
+## Phase 4: Learning Goals & Project Milestones
+- **Status**: Completed
+- **Date**: 2026-11-25
+
+### What Was Built:
+1. **Learning Workspace**:
+   - Replaced the Phase 4 placeholder with seeded learning roadmaps and lesson completion tracking.
+   - Added derived progress indicators, review dates, learning-goal creation, and deletion.
+2. **Project Workspace**:
+   - Added project cards with status, target dates, tech stack, and milestone completion summaries.
+   - Added project creation/deletion and a project detail workspace for editing project metadata and links.
+   - Added milestone creation, completion toggles, and deletion.
+3. **Run & Build Repairs**:
+   - Declared the existing application imports and Tailwind/PostCSS tooling in `client/package.json`.
+   - Added the missing shared card primitive and Kanban board modules required for the existing routes to build.
+
+### Validation:
+- `npm run build` passes.
+- `npm run lint` passes with the ESLint version matching the existing config.
+- Vite development server and the Learning, Projects, and Project Detail routes verified in-browser.
+
+### Files Created / Updated:
+- `src/pages/LearningPage.jsx`
+- `src/pages/ProjectsPage.jsx`
+- `src/pages/ProjectDetailPage.jsx`
+- `src/components/tasks/KanbanBoard.jsx`
+- `src/components/ui/card.jsx`
+- `client/package.json` and `client/package-lock.json`
