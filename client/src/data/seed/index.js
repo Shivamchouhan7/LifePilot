@@ -22,8 +22,15 @@ export function initializeSeedData(force = false) {
 }
 
 export function resetSeedData() {
-  storage.clearAllEntities();
+  if (!storage.clearAllEntities()) {
+    throw new Error('Could not clear the saved LifePilot data.');
+  }
   initializeSeedData(true);
+  const requiredEntities = ['tasks', 'applications', 'learning', 'projects', 'notes', 'settings', 'events'];
+  const missingEntity = requiredEntities.find((entity) => storage.get(entity) === null);
+  if (missingEntity) {
+    throw new Error(`Could not restore the default ${missingEntity} data.`);
+  }
   console.info('LifePilot seed data has been reset to defaults.');
   return { success: true, message: 'LifePilot demo data reset complete.' };
 }

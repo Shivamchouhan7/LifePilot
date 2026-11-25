@@ -9,6 +9,7 @@ const AuthContext = createContext({
   isLoading: true,
   login: async () => {},
   register: async () => {},
+  updateProfile: () => {},
   logout: () => {},
 });
 
@@ -66,6 +67,13 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateProfile = (profile) => {
+    if (!user) return;
+    const updatedUser = { ...user, ...profile, email: user.email };
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -74,6 +82,7 @@ export function AuthProvider({ children }) {
         isLoading,
         login,
         register,
+        updateProfile,
         logout,
       }}
     >

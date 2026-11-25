@@ -7,10 +7,11 @@ import { Button } from '../ui/button';
 import { LayoutList, Layers } from 'lucide-react';
 
 export function TasksDashboard() {
-  const { tasks, isLoading, refetch } = useTasks();
+  const { data: tasks = [], isLoading, isError, error, refetch } = useTasks();
   const [view, setView] = useState('list'); // 'list' | 'kanban'
 
   if (isLoading) return <div className="p-4">Loading tasks…</div>;
+  if (isError) return <div className="p-4 text-sm text-danger" role="alert">{error.message}</div>;
 
   return (
     <div className="p-4 space-y-4">

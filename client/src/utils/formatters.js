@@ -1,17 +1,24 @@
 import { format, formatDistanceToNow, isToday, isTomorrow, isYesterday, isPast, parseISO } from 'date-fns';
+import { storage } from './storage';
 
-export function formatDate(dateInput, formatStr = 'MMM d, yyyy') {
+function getSettings() {
+  return storage.get('settings', [])[0] || {};
+}
+
+export function formatDate(dateInput, formatStr) {
   if (!dateInput) return '—';
   try {
     const date = typeof dateInput === 'string' ? parseISO(dateInput) : dateInput;
-    return format(date, formatStr);
+    return format(date, formatStr || getSettings().dateFormat || 'MMM d, yyyy');
   } catch {
     return '—';
   }
 }
 
 export function formatDateTime(dateInput) {
-  return formatDate(dateInput, 'MMM d, yyyy h:mm a');
+  const settings = getSettings();
+  const timeFormat = settings.timeFormat === '24h' ? 'HH:mm' : 'h:mm a';
+  return formatDate(dateInput, `${settings.dateFormat || 'MMM d, yyyy'} ${timeFormat}`);
 }
 
 export function formatRelativeDate(dateInput) {

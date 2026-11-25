@@ -1,4 +1,5 @@
 import { createStorageService } from './storageService';
+import { storage } from '../utils/storage';
 
 const baseService = createStorageService('tasks');
 
@@ -12,10 +13,15 @@ export const taskService = {
   },
 
   async create(payload) {
+    const savedSettings = storage.get('settings', [])[0];
+    const configuredPriority = savedSettings?.defaultTaskPriority;
+    const defaultPriority = ['high', 'medium', 'low'].includes(configuredPriority)
+      ? configuredPriority
+      : 'medium';
     const task = {
       title: payload.title,
       description: payload.description || '',
-      priority: payload.priority || 'medium',
+      priority: payload.priority || defaultPriority,
       status: payload.status || 'todo',
       dueAt: payload.dueAt || null,
       category: payload.category || 'Work',

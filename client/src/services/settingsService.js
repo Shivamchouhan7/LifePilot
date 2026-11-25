@@ -7,7 +7,7 @@ const DEFAULT_SETTINGS = {
   profile: {
     name: 'Alex Morgan',
     email: 'alex.morgan@example.com',
-    role: 'Full Stack Engineer',
+    role: 'Staff Frontend Engineer',
     avatar: '',
   },
   theme: 'dark',
@@ -20,7 +20,12 @@ const DEFAULT_SETTINGS = {
 export const settingsService = {
   async getAll() {
     const list = await baseService.getAll();
-    return list.length ? list[0] : DEFAULT_SETTINGS;
+    const saved = list[0] || {};
+    return {
+      ...DEFAULT_SETTINGS,
+      ...saved,
+      profile: { ...DEFAULT_SETTINGS.profile, ...(saved.profile || {}) },
+    };
   },
 
   async getById() {
@@ -30,17 +35,29 @@ export const settingsService = {
   async create(payload) {
     const existing = await baseService.getAll();
     if (existing.length) {
-      return baseService.update(existing[0].id, payload);
+      return this.update(existing[0].id, payload);
     }
-    return baseService.create({ ...DEFAULT_SETTINGS, ...payload });
+    return baseService.create({
+      ...DEFAULT_SETTINGS,
+      ...payload,
+      profile: { ...DEFAULT_SETTINGS.profile, ...(payload.profile || {}) },
+    });
   },
 
   async update(id, payload) {
     const existing = await baseService.getAll();
     if (!existing.length) {
-      return baseService.create({ ...DEFAULT_SETTINGS, ...payload });
+      return baseService.create({
+        ...DEFAULT_SETTINGS,
+        ...payload,
+        profile: { ...DEFAULT_SETTINGS.profile, ...(payload.profile || {}) },
+      });
     }
-    return baseService.update(existing[0].id, payload);
+    const current = existing[0];
+    return baseService.update(current.id, {
+      ...payload,
+      profile: { ...DEFAULT_SETTINGS.profile, ...(current.profile || {}), ...(payload.profile || {}) },
+    });
   },
 
   async remove() {

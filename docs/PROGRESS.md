@@ -149,7 +149,6 @@
 - `src/components/tasks/KanbanBoard.jsx`
 - `src/components/ui/card.jsx`
 - `client/package.json` and `client/package-lock.json`
-
 ## Phase 5: Calendar Views & Notes System
 - **Status**: Completed
 - **Date**: 2026-11-25
@@ -183,3 +182,27 @@
 - `src/routes/AppRoutes.jsx`
 - `src/components/layout/QuickAddMenu.jsx`
 - `client/package.json` and `client/package-lock.json`
+## Phase 6: Overview, Analytics & Settings
+- **Status**: Completed
+- **Date**: 2026-11-25
+
+### What Was Built:
+1. **Overview Dashboard**:
+   - Added live workspace metrics for tasks, applications, projects, and learning goals.
+   - Added upcoming events, overdue and high-priority task summaries, project milestone progress, and recent applications.
+2. **Analytics**:
+   - Added visualizations for task status, application stages, weekly task completions, and learning progress.
+   - Added summary metrics and empty-data states.
+3. **Settings**:
+   - Added editable profile, theme, notification, date/time format, and default task-priority preferences.
+   - Connected profile and theme changes to the app shell; applied date/time preferences to shared formatters and task priority defaults to task creation.
+   - Added local workspace JSON export and confirmed reset-to-demo-data with storage checks and query-cache refresh.
+4. **Reliability**:
+   - Fixed Tasks dashboard query handling so the route renders correctly after workspace reset.
+
+### Validation:
+- `npm run lint` passes.
+- `npm run build` passes; Vite reports the initial JavaScript chunk exceeds 500 KB.
+- `npm audit --omit=dev` reports no runtime dependency vulnerabilities.
+- Browser checks verified Overview, Analytics, Settings, Tasks, Calendar, and Notes routes; profile/theme/preferences save; export action; and confirmed reset restores demo settings/data.
+- Verified configured task priority, custom date format, and 24-hour date/time formatting in the browser.
