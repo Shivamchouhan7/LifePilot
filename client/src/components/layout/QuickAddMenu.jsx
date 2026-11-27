@@ -12,7 +12,7 @@ import { Plus, CheckSquare, Briefcase, GraduationCap, FolderGit2, FileText, Lock
 export function QuickAddMenu() {
   const navigate = useNavigate();
   const actions = [
-    { label: 'New Task', icon: CheckSquare, phase: 'Phase 2' },
+    { label: 'New Task', icon: CheckSquare, phase: 'Phase 2', path: '/tasks?new=1' },
     { label: 'New Application', icon: Briefcase, phase: 'Phase 3' },
     { label: 'New Learning Goal', icon: GraduationCap, phase: 'Phase 4' },
     { label: 'New Project', icon: FolderGit2, phase: 'Phase 4' },

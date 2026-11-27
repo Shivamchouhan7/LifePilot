@@ -230,3 +230,28 @@
 ### Known Issues:
 - `.github/instructions/backend.instructions.md` and `docs/BACKEND_INTEGRATION.md` are missing; no `server/` directory exists.
 - REST paths, verbs, response envelope, and recurring-task semantics remain undecided.
+
+## Phase 2 Corrections: Task Workflow Completion
+
+- **Status**: Completed
+- **Date**: 2026-11-27
+
+### What Was Built:
+1. Added task create/edit forms using React Hook Form and Zod, including field-level validation for recurrence dates, local-time form values, and ISO persistence.
+2. Added URL-backed title/description/tag search, priority/status/category/tag filters, sorting, and mutually exclusive All/Overdue/Today/Upcoming/Completed sections.
+3. Completed List and Kanban task actions, including keyboard-accessible status drag-and-drop, completion controls, confirmation-based deletion, and Quick Add navigation.
+4. Serialized each task's completion read-modify-write operation and created at most one next recurring task per completion transition.
+5. Added optimistic update rollback, mutation feedback, and disabled completion controls while a task mutation is pending.
+6. Removed 375px page-level horizontal overflow while retaining the horizontally scrollable task-section tabs.
+
+### Validation:
+- `npm run build` and `npm run lint` passed from `client/`.
+- Browser checks verified create/edit/delete, validation, local-time conversion and refresh persistence, recurrence double-click producing exactly one next instance, filter/sort/query restoration, empty-state clearing, and status changes across all Kanban columns.
+- Recurrence checks covered month-end, leap-year, weekly, and DST-boundary dates.
+- Captured List, Kanban, form, and empty-filter views at 375px, 768px, and 1280px in light and dark themes; no page-level horizontal overflow or browser console errors/warnings were observed.
+- The Tasks Overdue count and Overview overdue metric both showed 6.
+
+### Files Created / Updated:
+- Added task form, filter, section, recurrence, and validation modules under `client/src/`.
+- Updated task dashboard, list/Kanban cards, task hook/service, and Quick Add.
+- Updated `docs/PROGRESS.md`.

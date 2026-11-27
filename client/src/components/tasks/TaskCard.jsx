@@ -1,54 +1,53 @@
-// src/components/tasks/TaskCard.jsx
-import React, { useState } from 'react';
-import { Trash2 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
-import { ConfirmDialog } from '../common/ConfirmDialog';
-import { useDeleteTask } from '../../hooks/useTasks';
+import React from 'react';
 import { format } from 'date-fns';
+import { Pencil, Repeat, Trash2 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { PriorityBadge } from '../common/PriorityBadge';
+import { StatusBadge } from '../common/StatusBadge';
 
-export function TaskCard({ task }) {
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const deleteTask = useDeleteTask();
+export function TaskCard({ task, onEdit, onDelete, onToggleComplete, isUpdating = false }) {
+  const isCompleted = task.status === 'completed';
+  const isOverdue = !isCompleted && task.dueAt && new Date(task.dueAt) < new Date();
 
   return (
-    <Card className="p-2 hover:shadow-lg transition-shadow">
-      <CardHeader className="flex-row items-start justify-between gap-2 p-0">
-        <CardTitle className="min-w-0 flex-1 truncate text-sm font-medium" title={task.title}>
-          {task.title}
-        </CardTitle>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 shrink-0 text-muted-foreground hover:text-danger"
-          aria-label={`Delete task ${task.title}`}
-          onClick={() => setDeleteConfirmOpen(true)}
-        >
-          <Trash2 className="h-4 w-4" />
+    <Card className={`p-3 transition-shadow hover:shadow-md ${isOverdue ? 'border-danger/50' : ''}`}>
+      <CardHeader className="flex-row items-start gap-3 p-0">
+        <input
+          type="checkbox"
+          checked={isCompleted}
+          disabled={isUpdating}
+          onChange={() => onToggleComplete(task)}
+          aria-label={`${isCompleted ? 'Reopen' : 'Complete'} ${task.title}`}
+          className="mt-1 h-4 w-4 shrink-0 accent-primary"
+        />
+        <div className="min-w-0 flex-1">
+          <CardTitle className={`text-sm font-medium ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+            {task.title}
+          </CardTitle>
+          {task.description && <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{task.description}</p>}
+        </div>
+        {task.recurring && (
+          <Repeat className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" aria-label={`Repeats ${task.recurring}`} title={`Repeats ${task.recurring}`} />
+        )}
+        <Button type="button" variant="ghost" size="icon" aria-label={`Edit ${task.title}`} onClick={() => onEdit(task)}>
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <Button type="button" variant="ghost" size="icon" aria-label={`Delete ${task.title}`} onClick={() => onDelete(task)}>
+          <Trash2 className="h-4 w-4 text-muted-foreground" />
         </Button>
       </CardHeader>
-      <CardContent className="p-0 text-xs">
-        <div className="flex flex-wrap gap-1 mt-1">
-          {task.priority && (
-            <Badge variant="secondary" className="uppercase">{task.priority}</Badge>
-          )}
-          {task.dueAt && (
-            <Badge variant="outline">{format(new Date(task.dueAt), 'MMM d')}</Badge>
-          )}
-        </div>
-        {deleteTask.isError && <p role="alert" className="mt-2 text-danger">{deleteTask.error.message}</p>}
+      <CardContent className="ml-7 flex flex-wrap items-center gap-2 p-0 pt-3">
+        <PriorityBadge priority={task.priority} />
+        <StatusBadge status={task.status} type="task" />
+        {task.dueAt && (
+          <span className={`text-xs ${isOverdue ? 'font-medium text-danger' : 'text-muted-foreground'}`}>
+            {isOverdue ? 'Overdue · ' : 'Due '}
+            {format(new Date(task.dueAt), 'MMM d, h:mm a')}
+          </span>
+        )}
+        {task.category && <span className="text-xs text-muted-foreground">{task.category}</span>}
       </CardContent>
-      <ConfirmDialog
-        open={deleteConfirmOpen}
-        onOpenChange={setDeleteConfirmOpen}
-        title="Delete task?"
-        description={`“${task.title}” will be permanently removed.`}
-        confirmText="Delete task"
-        isLoading={deleteTask.isPending}
-        onConfirm={() => deleteTask.mutate(task.id, { onSuccess: () => setDeleteConfirmOpen(false) })}
-      />
     </Card>
   );
 }
