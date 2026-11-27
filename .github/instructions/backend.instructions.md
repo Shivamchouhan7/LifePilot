@@ -16,7 +16,7 @@ applyTo: "**"
 
 ## 2. Stack (pinned majors)
 - Node 20+, ESM (`"type": "module"`), JavaScript only. Separate `server/package.json`.
-- express 4, mongoose 8, zod 3, jsonwebtoken 9, bcryptjs 2 (pure JS, no native build on Windows), helmet, cors, express-rate-limit 7, cookie-parser, morgan, dotenv.
+- express 4, mongoose 8, zod 4 (4.6.7 or newer; zod 3 has a known high-severity memory-exhaustion advisory, GHSA-mrhx-c7xc-m3w5), jsonwebtoken 9,
 - Dev/test: nodemon, vitest, supertest, mongodb-memory-server, eslint (same major as the frontend).
 - Anything else: ask first.
 
@@ -29,7 +29,7 @@ applyTo: "**"
 - CORS: allow only `CLIENT_ORIGIN`, `credentials: true`. helmet enabled. Body limit 100kb. Rate limit: auth routes 10 requests/15 min/IP; the rest of the API 300/15 min/IP.
 - Every route except `/api/health`, `/api/auth/register`, `/api/auth/login`, `/api/auth/refresh` requires auth.
 - Ownership: every document has `userId`. EVERY query filters by `req.user.id`. Fetching another user's document returns 404 (not 403). `userId` is never accepted from the request body or query.
-- Validation: every request body, query and params validated with Zod `.strict()` schemas (unknown keys rejected, preventing mass assignment). Strip keys beginning with `$` or containing `.` from all input to block NoSQL operator injection. Validate ObjectId params before querying.
+- Validation:every request body, query and params validated with Zod `z.strictObject()` schemas (unknown keys rejected, preventing mass assignment). Every array and record in a schema must have an explicit `.max()`, which limits the oversized-collection risk.
 - Server-owned fields the client can NEVER set: `id`, `userId`, `createdAt`, `updatedAt`, `statusHistory`, `completedAt`, and token fields.
 - Single-user mode: when `ALLOW_REGISTRATION=false`, `/api/auth/register` returns 403.
 - Errors never leak stack traces or Mongoose internals to the client in production.
@@ -44,7 +44,7 @@ applyTo: "**"
 - Central async error handler, 404 handler for unknown routes, and a `GET /api/health` returning `{ data: { status: "ok" } }`.
 
 ## 5. Data and logic rules
-- Enums, field names and required/optional rules mirror the frontend (`src/constants`, Zod form schemas, seed generators), as recorded in `docs/API_CONTRACT.md`.
+- Enums, field names and required/optional rules mirror the frontend (`client/src/constants`, `client/src/validation`, `client/src/data/seed`), as recorded in `docs/API_CONTRACT.md`.
 - Indexes: `{ userId: 1 }` plus sensible compound indexes for the contract's filters (e.g. tasks by `userId + status + dueAt`, applications by `userId + status`, text index on searchable fields).
 - Server-owned logic (must be moved out of the client in `/backend-3`):
   - Application status change appends `{ status, at, note }` to `statusHistory`. Creating an application seeds `statusHistory` with its initial status.
