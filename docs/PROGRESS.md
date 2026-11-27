@@ -293,11 +293,17 @@
 ### Phase 3 Re-audit Addendum
 
 #### Final schema
+- Source: `client/src/validation/applicationSchema.js`.
 - Fields: `company`, `jobTitle`, `jobType`, `source`, `url`, `appliedDate`, `status`, `recruiterName`, `recruiterEmail`, `description`, `skills`, `salary`, `location`, `followUpDate`, `interviewAt`, `assessmentAt`, and `notes`.
-- `status`: `interested`, `applied`, `assessment`, `interview`, `hr_round`, `offered`, `rejected`, or `withdrawn`. `jobType` currently supports `full_time`.
-- Validation requires trimmed company, job title, source, and applied date; limits URL values to HTTP(S); validates optional email/date values; caps skills at 20; and applies field length limits.
-- `interviewAt` is required for `interview` and `hr_round`; interview and assessment dates cannot precede `appliedDate`.
-- Interview and other datetime form values are prefilled in local time and saved as ISO timestamps.
+- Enums: `jobType` is the literal `full_time`; `status` must be one of `interested`, `applied`, `assessment`, `interview`, `hr_round`, `offered`, `rejected`, or `withdrawn`.
+- `company` and `jobTitle` are trimmed, required non-empty strings capped at 150 characters. `source` is trimmed, required, non-empty, and capped at 100 characters.
+- `url` is trimmed; empty is allowed, otherwise it must parse as an absolute HTTP or HTTPS URL. The schema adds no URL length limit.
+- `appliedDate` is required and must parse as a valid date. `followUpDate`, `interviewAt`, and `assessmentAt` may be empty; non-empty values must parse as valid dates.
+- `status` must match a defined status. `interviewAt` is required when status is `interview` or `hr_round`. The calendar day for `interviewAt` or `assessmentAt` cannot be before the `appliedDate` calendar day.
+- `recruiterName` is optional and capped at 100 characters. `recruiterEmail` is trimmed and may be empty; otherwise it must be a valid email address.
+- `description` and `notes` are capped at 5,000 characters; `salary` and `location` at 150 characters each.
+- `skills` must be an array of non-empty trimmed strings with at most 20 entries. Case-insensitive duplicate rejection and the visible 20-skill message are enforced by the form input, not by this Zod schema.
+- Datetime form values are prefilled in local time and saved as ISO timestamps.
 
 #### Re-audit evidence
 - Skills input: keyboard entry, trimming, duplicate rejection, comma-separated additions, 20-skill cap, visible feedback, Backspace removal, and accessible remove buttons passed.
