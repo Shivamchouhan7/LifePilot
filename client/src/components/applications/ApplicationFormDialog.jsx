@@ -3,9 +3,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, isValid } from 'date-fns';
 import { X } from 'lucide-react';
+import { JOB_TYPES } from '../../constants/jobTypes';
 import { APPLICATION_STATUSES } from '../../constants/status';
 import { applicationSchema } from '../../validation/applicationSchema';
 import { ApplicationSkillsField } from './ApplicationSkillsField';
+import { ApplicationRecruiterFields, FieldError } from './ApplicationRecruiterFields';
 import { Modal } from '../common/Modal';
 import { Button } from '../ui/button';
 
@@ -21,7 +23,7 @@ function defaultValues(application) {
   return {
     company: application?.company || '',
     jobTitle: application?.jobTitle || '',
-    jobType: 'full_time',
+    jobType: application?.jobType || 'full_time',
     source: application?.source || 'LinkedIn',
     url: application?.url || '',
     appliedDate: formattedValue(application?.appliedDate, 'yyyy-MM-dd') || format(new Date(), 'yyyy-MM-dd'),
@@ -37,10 +39,6 @@ function defaultValues(application) {
     assessmentAt: formattedValue(application?.assessmentAt, "yyyy-MM-dd'T'HH:mm"),
     notes: application?.notes || '',
   };
-}
-
-function FieldError({ error }) {
-  return error ? <span className="mt-1 block text-xs text-danger">{error.message}</span> : null;
 }
 
 function toPayload(values) {
@@ -159,7 +157,9 @@ export function ApplicationFormDialog({ open, onOpenChange, application, onSave,
           <label className="block text-sm font-medium">
             Job type
             <select className={fieldClass} {...register('jobType')}>
-              <option value="full_time">Full-time</option>
+              {Object.entries(JOB_TYPES).map(([jobType, config]) => (
+                <option key={jobType} value={jobType}>{config.label}</option>
+              ))}
             </select>
             <FieldError error={errors.jobType} />
           </label>
@@ -212,16 +212,7 @@ export function ApplicationFormDialog({ open, onOpenChange, application, onSave,
             <input className={fieldClass} type="datetime-local" min={appliedDate ? `${appliedDate}T00:00` : undefined} {...register('assessmentAt')} />
             <FieldError error={errors.assessmentAt} />
           </label>
-          <label className="block text-sm font-medium">
-            Recruiter name
-            <input className={fieldClass} maxLength={100} {...register('recruiterName')} />
-            <FieldError error={errors.recruiterName} />
-          </label>
-          <label className="block text-sm font-medium">
-            Recruiter email
-            <input className={fieldClass} type="email" maxLength={254} {...register('recruiterEmail')} />
-            <FieldError error={errors.recruiterEmail} />
-          </label>
+          <ApplicationRecruiterFields register={register} errors={errors} />
         </div>
         <ApplicationSkillsField
           skills={skills}

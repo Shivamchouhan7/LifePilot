@@ -318,3 +318,8 @@
 - Accessibility/security/layout: skills removal remained keyboard-accessible; the Applications external job link uses `rel="noopener noreferrer"`; the 768px overflow was resolved by reducing the TopBar action-group gap.
 - Browser console/error and warning capture across Overview, Applications, Calendar, Analytics, and an application detail returned no entries.
 - Temporary applications were deleted; the application count returned to 16. No new source file exceeds 250 lines; the skills field was extracted to `ApplicationSkillsField.jsx`.
+
+## Fix-1 Corrections
+
+- `ApplicationFormDialog.jsx` was 256 physical lines. `Measure-Object -Line` reported 238 because it skips blank lines; the recruiter fields were extracted into `ApplicationRecruiterFields.jsx`, bringing the form dialog under the 250-line limit.
+- The application `jobType` limit is now fixed to support `internship`, `full_time`, and `part_time` with shared labels. The seed contains three internships and two part-time applications; Datadog's `hr_round` application now has an interview date relative to today. The service default remains `full_time`.

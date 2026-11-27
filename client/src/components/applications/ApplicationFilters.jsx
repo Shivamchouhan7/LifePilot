@@ -2,6 +2,7 @@ import React from 'react';
 import { RotateCcw, Search } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { APPLICATION_STATUSES } from '../../constants/status';
+import { JOB_TYPES } from '../../constants/jobTypes';
 import { getApplicationFilterOptions } from '../../utils/applicationFilters';
 
 const fieldClass = 'h-10 min-w-0 rounded-lg border border-input bg-background px-3 text-sm text-foreground';
@@ -10,8 +11,6 @@ export function ApplicationFilters({ applications }) {
   const [params, setParams] = useSearchParams();
   const companies = getApplicationFilterOptions(applications, 'company');
   const sources = getApplicationFilterOptions(applications, 'source');
-  const jobTypes = getApplicationFilterOptions(applications, 'jobType');
-
   const update = (key, value) => {
     const next = new URLSearchParams(params);
     if (value) next.set(key, value);
@@ -50,7 +49,9 @@ export function ApplicationFilters({ applications }) {
         </select>
         <select className={fieldClass} value={params.get('jobType') || ''} onChange={(event) => update('jobType', event.target.value)} aria-label="Filter by job type">
           <option value="">All job types</option>
-          {jobTypes.map((jobType) => <option key={jobType} value={jobType}>{jobType.replace('_', ' ')}</option>)}
+          {Object.entries(JOB_TYPES).map(([jobType, config]) => (
+            <option key={jobType} value={jobType}>{config.label}</option>
+          ))}
         </select>
         <select className={fieldClass} value={params.get('source') || ''} onChange={(event) => update('source', event.target.value)} aria-label="Filter by source">
           <option value="">All sources</option>

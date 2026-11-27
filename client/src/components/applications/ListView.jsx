@@ -2,6 +2,7 @@
 import React from 'react';
 import { format, isValid } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { JOB_TYPES } from '../../constants/jobTypes';
 import { ApplicationStatusControl } from './ApplicationStatusControl';
 
 const columns = [
@@ -45,7 +46,7 @@ export function ListView({ applications, sort, direction, onSort, onEdit, onStat
               </td>
               <td className="max-w-64 px-4 py-3">
                 <Link to={`/applications/${application.id}`} className="block truncate hover:text-primary">{application.jobTitle}</Link>
-                <span className="text-xs capitalize text-muted-foreground">{(application.jobType || '').replace('_', ' ')}</span>
+                <span className="text-xs text-muted-foreground">{JOB_TYPES[application.jobType]?.label}</span>
               </td>
               <td className="px-4 py-3">
                 <ApplicationStatusControl application={application} onChange={(status) => onStatusChange(application.id, status)} isUpdating={isUpdating} />

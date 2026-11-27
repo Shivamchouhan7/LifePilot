@@ -1,5 +1,6 @@
 import { startOfDay } from 'date-fns';
 import { z } from 'zod';
+import { JOB_TYPES } from '../constants/jobTypes';
 import { APPLICATION_STATUSES } from '../constants/status';
 
 function isValidDate(value) {
@@ -19,7 +20,7 @@ function isValidUrl(value) {
 export const applicationSchema = z.object({
   company: z.string().trim().min(1, 'Enter a company name.').max(150, 'Use 150 characters or fewer.'),
   jobTitle: z.string().trim().min(1, 'Enter a job title.').max(150, 'Use 150 characters or fewer.'),
-  jobType: z.literal('full_time'),
+  jobType: z.enum(Object.keys(JOB_TYPES)),
   source: z.string().trim().min(1, 'Enter where you found this role.').max(100, 'Use 100 characters or fewer.'),
   url: z.string().trim().refine(isValidUrl, 'Enter a valid HTTP or HTTPS URL.'),
   appliedDate: z.string().min(1, 'Choose the application date.').refine(isValidDate, 'Enter a valid application date.'),

@@ -1,6 +1,7 @@
 import React from 'react';
 import { format, isValid } from 'date-fns';
 import { ExternalLink, Mail } from 'lucide-react';
+import { JOB_TYPES } from '../../constants/jobTypes';
 import { Badge } from '../ui/badge';
 
 function displayDate(value, withTime = false) {
@@ -25,7 +26,7 @@ export function ApplicationDetails({ application }) {
       <div>
         <h2 className="font-semibold">Application details</h2>
         <dl className="mt-4 grid gap-4 sm:grid-cols-2">
-          <Detail label="Job type">{application.jobType?.replace('_', ' ')}</Detail>
+          <Detail label="Job type">{JOB_TYPES[application.jobType]?.label}</Detail>
           <Detail label="Source">{application.source}</Detail>
           <Detail label="Applied">{displayDate(application.appliedDate)}</Detail>
           <Detail label="Location">{application.location}</Detail>
