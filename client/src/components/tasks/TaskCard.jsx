@@ -34,8 +34,8 @@ export function TaskCard({ task }) {
           {task.priority && (
             <Badge variant="secondary" className="uppercase">{task.priority}</Badge>
           )}
-          {task.due && (
-            <Badge variant="outline">{format(new Date(task.due), 'MMM d')}</Badge>
+          {task.dueAt && (
+            <Badge variant="outline">{format(new Date(task.dueAt), 'MMM d')}</Badge>
           )}
         </div>
         {deleteTask.isError && <p role="alert" className="mt-2 text-danger">{deleteTask.error.message}</p>}

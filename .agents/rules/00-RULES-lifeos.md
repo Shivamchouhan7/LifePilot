@@ -14,15 +14,15 @@ Save as a workspace rule (Antigravity: `...` menu > Customizations > Rules). Als
 - Environment: Windows + PowerShell. Use PowerShell-compatible commands only. For code audits use
   `git grep` or `Select-String`, never `grep`, `cat`, `rm -rf` or other Unix-only commands.
 
-## 2. Stack (pinned majors)
-- Node 20+, Vite 5, React 18, JavaScript only (no TypeScript, `"tsx": false` in components.json).
-- Tailwind CSS 3.4 (NOT v4) + shadcn/ui (Tailwind v3 setup).
-- react-router-dom 6, lucide-react, recharts 2, react-hook-form 7 + @hookform/resolvers 3, zod 3, axios, date-fns 3.
-- @tanstack/react-query 5 for all data fetching/mutations.
-- @hello-pangea/dnd for Kanban (drag-and-drop is REQUIRED, with keyboard support).
-- react-big-calendar (date-fns localizer) for calendar views.
-- react-markdown + remark-gfm for notes preview.
-- Font: Inter (self-hosted via @fontsource/inter, no CDN).
+## 2. Stack (pinned versions)
+- React 18.3.1, Vite 5.4.21, JavaScript only (no TypeScript, `"tsx": false` in components.json).
+- Tailwind CSS 3.4.19 (NOT v4) + shadcn/ui (Tailwind v3 setup).
+- react-router-dom 7.18.7, lucide-react 1.80.0, recharts 3.11.1, react-hook-form 7.92.0 + @hookform/resolvers 3.10.0, zod 3.25.76, axios 1.21.1, date-fns 4.4.0.
+- @tanstack/react-query 5.108.4 for all data fetching/mutations.
+- @hello-pangea/dnd 18.0.1 for Kanban (drag-and-drop is REQUIRED, with keyboard support).
+- react-big-calendar 1.20.0 (date-fns localizer) for calendar views.
+- react-markdown 10.1.0 + remark-gfm 4.0.1 for notes preview.
+- Font: Inter (self-hosted via @fontsource/inter 5.3.0, no CDN).
 - Anything else: ask first.
 
 ## 3. Design tokens

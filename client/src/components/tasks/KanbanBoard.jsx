@@ -1,5 +1,5 @@
 import React from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { useUpdateTask } from '../../hooks/useTasks';
 import { TASK_PRIORITIES, TASK_STATUSES } from '../../constants/status';
 import { formatDate } from '../../utils/formatters';

@@ -207,6 +207,14 @@
 - Browser checks verified Overview, Analytics, Settings, Tasks, Calendar, and Notes routes; profile/theme/preferences save; export action; and confirmed reset restores demo settings/data.
 - Verified configured task priority, custom date format, and 24-hour date/time formatting in the browser.
 
+## Corrections (Fix-0)
+
+- Tasks currently has only a List/Kanban toggle; there is no add/edit/delete UI, search, filters, sorting, or recurrence generation.
+- The Applications pages are placeholders: `ApplicationsPage` and `ApplicationDetailPage` render `PlaceholderPage`, and `ApplicationsDashboard` is unused.
+- No tests exist under `client/src/tests`, and no screenshots are committed.
+- `docs/BACKEND_INTEGRATION.md` does not exist.
+- `NotesPage.jsx`, `CalendarPage.jsx`, and `SettingsPage.jsx` exceed 250 lines.
+
 ## Backend 0: API Contract
 - **Status**: Completed
 - **Date**: 2026-11-26
