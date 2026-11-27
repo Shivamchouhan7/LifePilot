@@ -206,3 +206,19 @@
 - `npm audit --omit=dev` reports no runtime dependency vulnerabilities.
 - Browser checks verified Overview, Analytics, Settings, Tasks, Calendar, and Notes routes; profile/theme/preferences save; export action; and confirmed reset restores demo settings/data.
 - Verified configured task priority, custom date format, and 24-hour date/time formatting in the browser.
+
+## Backend 0: API Contract
+- **Status**: Completed
+- **Date**: 2026-11-26
+
+### What Was Built:
+- Documented source-derived entities, client service operations, server-owned logic, frontend assumptions, mismatches, and open questions in `docs/API_CONTRACT.md`.
+- Recorded that the current client defines no HTTP API endpoint paths; endpoint count is 0.
+
+### Files Created / Updated:
+- Created `docs/API_CONTRACT.md`
+- Appended this Backend 0 entry to `docs/PROGRESS.md`
+
+### Known Issues:
+- `.github/instructions/backend.instructions.md` and `docs/BACKEND_INTEGRATION.md` are missing; no `server/` directory exists.
+- REST paths, verbs, response envelope, and recurring-task semantics remain undecided.
