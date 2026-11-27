@@ -1,6 +1,7 @@
 import { createStorageService } from './storageService';
 
 const baseService = createStorageService('applications');
+const updateQueues = new Map();
 
 export const applicationService = {
   async getAll(params) {
@@ -18,7 +19,7 @@ export const applicationService = {
       { status: initialStatus, at: now, note: 'Initial application entry' },
     ];
 
-    const application = {
+    return baseService.create({
       company: payload.company,
       jobTitle: payload.jobTitle,
       jobType: payload.jobType || 'full_time',
@@ -37,27 +38,37 @@ export const applicationService = {
       assessmentAt: payload.assessmentAt || null,
       notes: payload.notes || '',
       statusHistory,
-    };
-    return baseService.create(application);
+    });
   },
 
   async update(id, payload) {
-    const existing = await baseService.getById(id);
-    const updatedPayload = { ...payload };
+    const previous = updateQueues.get(id) || Promise.resolve();
+    const operation = previous.catch(() => undefined).then(async () => {
+      const existing = await baseService.getById(id);
+      const { statusNote, ...applicationPayload } = payload;
+      delete applicationPayload.statusHistory;
+      const updatedPayload = { ...applicationPayload };
 
-    if (payload.status && payload.status !== existing.status) {
-      const historyEntry = {
-        status: payload.status,
-        at: new Date().toISOString(),
-        note: payload.statusNote || `Status updated to ${payload.status}`,
-      };
-      updatedPayload.statusHistory = [
-        ...(existing.statusHistory || []),
-        historyEntry,
-      ];
+      if (payload.status && payload.status !== existing.status) {
+        updatedPayload.statusHistory = [
+          ...(existing.statusHistory || []),
+          {
+            status: payload.status,
+            at: new Date().toISOString(),
+            note: statusNote || `Status updated to ${payload.status}`,
+          },
+        ];
+      }
+
+      return baseService.update(id, updatedPayload);
+    });
+    updateQueues.set(id, operation);
+
+    try {
+      return await operation;
+    } finally {
+      if (updateQueues.get(id) === operation) updateQueues.delete(id);
     }
-
-    return baseService.update(id, updatedPayload);
   },
 
   async remove(id) {

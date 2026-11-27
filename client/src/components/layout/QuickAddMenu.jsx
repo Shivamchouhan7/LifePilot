@@ -13,7 +13,7 @@ export function QuickAddMenu() {
   const navigate = useNavigate();
   const actions = [
     { label: 'New Task', icon: CheckSquare, phase: 'Phase 2', path: '/tasks?new=1' },
-    { label: 'New Application', icon: Briefcase, phase: 'Phase 3' },
+    { label: 'New Application', icon: Briefcase, phase: 'Phase 3', path: '/applications?new=1' },
     { label: 'New Learning Goal', icon: GraduationCap, phase: 'Phase 4' },
     { label: 'New Project', icon: FolderGit2, phase: 'Phase 4' },
     { label: 'New Note', icon: FileText, phase: 'Phase 5', path: '/notes?new=1' },
@@ -24,7 +24,7 @@ export function QuickAddMenu() {
       <DropdownMenuTrigger asChild>
         <Button
           size="sm"
-          className="gap-1.5 h-9 rounded-lg px-3 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+          className="gap-1.5 h-9 rounded-lg px-2 sm:px-3 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
           aria-label="Quick add new item"
         >
           <Plus className="h-4 w-4" />

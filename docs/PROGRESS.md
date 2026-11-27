@@ -255,3 +255,60 @@
 - Added task form, filter, section, recurrence, and validation modules under `client/src/`.
 - Updated task dashboard, list/Kanban cards, task hook/service, and Quick Add.
 - Updated `docs/PROGRESS.md`.
+
+## Phase 3 Corrections: Applications Workflow Completion
+
+- **Status**: Completed
+- **Date**: 2026-11-27
+
+### What Was Built:
+1. Replaced the Applications placeholders with a dashboard featuring application statistics, a status pipeline, URL-backed search and filters, sortable table, and an eight-stage Kanban board.
+2. Added validated create/edit forms, application detail pages, recruiter and job links, skills, status controls, and a newest-first status history timeline.
+3. Serialized per-application status updates and recorded history only when a status changes; added optimistic updates with rollback, mutation feedback, and Calendar cache invalidation.
+4. Connected Quick Add to the application form and clear `?new=1` after save or close.
+5. Adjusted the detail header and status controls for tablet layouts to prevent horizontal overflow at 768px.
+
+### Validation:
+- `npm run build` and `npm run lint` passed from `client/`. Vite continues to warn that the initial JavaScript chunk is approximately 1.28 MB.
+- Browser checks covered valid and invalid form values, date validation, local-time conversion, CRUD, status changes, history ordering, duplicate concurrent updates, Kanban keyboard and pointer moves, filters, URL restoration, Quick Add, deep links, and unknown IDs.
+- A 9:00 AM interview persisted as `2026-11-28T03:30:00.000Z` in the browser's local timezone and displayed as 9:00 AM.
+- Application interview and follow-up dates appeared on Calendar; Overview and Analytics application data remained available. Global Search navigation was verified.
+- No browser console errors or warnings occurred on Overview, Applications, Calendar, or Analytics.
+- Captured table, Kanban, form, and detail screenshots at 375px, 768px, and 1280px in both themes (24 states). No screenshots were added to the repository.
+- Removed the temporary validation application and confirmed the seeded application count returned to 16.
+- No new source file exceeds 250 lines. Existing `client/src/pages/NotesPage.jsx` remains 274 lines.
+
+### Files Created / Updated:
+- Created application detail, filters, form, history, Kanban, pipeline, stats, and status-control components under `client/src/components/applications/`.
+- Created `client/src/utils/applicationFilters.js` and `client/src/validation/applicationSchema.js`.
+- Updated `client/src/components/applications/ApplicationCard.jsx`, `ApplicationsDashboard.jsx`, and `ListView.jsx`.
+- Updated `client/src/components/layout/QuickAddMenu.jsx`, `client/src/hooks/useApplications.js`, `client/src/pages/ApplicationDetailPage.jsx` and `ApplicationsPage.jsx`, and `client/src/services/applicationService.js`.
+- Updated `docs/PROGRESS.md`.
+
+### Known Issues:
+- The seeded Datadog application is in `hr_round` without an interview date; the form requires an interview date for interview-stage applications.
+- The production build still reports the existing oversized initial JavaScript chunk.
+- The previously reported 1px document overflow is resolved; the re-audit confirms no document overflow at 768px, while the table and Kanban retain internal horizontal scrolling.
+
+### Phase 3 Re-audit Addendum
+
+#### Final schema
+- Fields: `company`, `jobTitle`, `jobType`, `source`, `url`, `appliedDate`, `status`, `recruiterName`, `recruiterEmail`, `description`, `skills`, `salary`, `location`, `followUpDate`, `interviewAt`, `assessmentAt`, and `notes`.
+- `status`: `interested`, `applied`, `assessment`, `interview`, `hr_round`, `offered`, `rejected`, or `withdrawn`. `jobType` currently supports `full_time`.
+- Validation requires trimmed company, job title, source, and applied date; limits URL values to HTTP(S); validates optional email/date values; caps skills at 20; and applies field length limits.
+- `interviewAt` is required for `interview` and `hr_round`; interview and assessment dates cannot precede `appliedDate`.
+- Interview and other datetime form values are prefilled in local time and saved as ISO timestamps.
+
+#### Re-audit evidence
+- Skills input: keyboard entry, trimming, duplicate rejection, comma-separated additions, 20-skill cap, visible feedback, Backspace removal, and accessible remove buttons passed.
+- Form validation: invalid URL/email, missing interview date for interview status, and interview dates earlier than the applied date were rejected with field-level feedback.
+- Query-string modal flow: `?new=1` cleared on close and save; refreshing afterward did not reopen the form.
+- Local-time conversion: a 9:00 AM interview saved as `2026-11-28T03:30:00.000Z` and displayed as 9:00 AM in the browser's local timezone.
+- Table controls: search, company/status/job-type/source filters, all six sorts, and query-string restoration after reload passed.
+- Status workflow: history remained newest-first; two rapid identical status selections added one history item; Kanban keyboard and pointer moves persisted.
+- Calendar and navigation: interview/follow-up events appeared on Calendar; Global Search opened the application detail; unknown IDs displayed “Application not found.”
+- Metrics: application stats matched table status counts. With two temporary test records present, Overview showed 14 active and 18 total; `/tasks` and Overview both showed 6 overdue tasks.
+- Responsive layouts: table, Kanban, form, and detail screenshots were captured at 375px, 768px, and 1280px in light and dark themes (24 states). No screenshots were added to the repository. No document overflow occurred at any tested width; the table and Kanban scroll internally.
+- Accessibility/security/layout: skills removal remained keyboard-accessible; the Applications external job link uses `rel="noopener noreferrer"`; the 768px overflow was resolved by reducing the TopBar action-group gap.
+- Browser console/error and warning capture across Overview, Applications, Calendar, Analytics, and an application detail returned no entries.
+- Temporary applications were deleted; the application count returned to 16. No new source file exceeds 250 lines; the skills field was extracted to `ApplicationSkillsField.jsx`.

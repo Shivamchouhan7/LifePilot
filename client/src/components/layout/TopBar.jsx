@@ -78,7 +78,7 @@ export function TopBar({ onOpenMobileMenu }) {
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1.5">
           {/* Mobile search icon button */}
           <Button
             variant="ghost"
