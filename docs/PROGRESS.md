@@ -329,3 +329,8 @@
 - Replaced the previous API contract draft using the client source and recorded field-level entities, proposed endpoints, server-owned logic, frontend assumptions, mismatches, auth gaps, derived values, and evidence-backed decisions.
 - The contract describes 8 client-side data shapes, 37 proposed endpoints, 8 mismatches, and 9 open-question items (8 decisions plus the missing `docs/BACKEND_INTEGRATION.md` handoff).
 - No server, frontend source, dependencies, tests, staging, or commits were changed or run for this documentation-only workflow.
+
+## Backend-0 Contract Decisions
+
+- Added the approved v1 decisions for recurrence, date formats, PATCH updates, list aggregation, status notes, limits, local data export, and the backend handoff.
+- Added authenticated `/api/auth/me` and `/api/auth/password` routes (39 proposed routes total), clarified the task recurrence mismatch, and marked contract questions decided.
